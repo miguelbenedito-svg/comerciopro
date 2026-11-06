@@ -1,0 +1,1099 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ComércioPro - Gestão Financeira e Presença Digital para Pequenos Comércios</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Google Fonts Inter -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#f0f9ff',
+              100: '#e0f2fe',
+              500: '#0284c7',
+              600: '#0369a1',
+              700: '#075985',
+              800: '#0c4a6e',
+              900: '#0f172a',
+            },
+            emerald: {
+              500: '#10b981',
+              600: '#059669',
+              700: '#047857',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased flex h-screen overflow-hidden">
+
+  <!-- NOTIFICAÇÃO TOAST GLOBAL -->
+  <div id="toast" class="fixed top-5 right-5 z-50 transform translate-x-full transition-transform duration-300 ease-in-out bg-slate-900 text-white px-5 py-3 rounded-xl shadow-2xl flex items-center gap-3 border border-slate-700 pointer-events-none">
+    <i id="toast-icon" data-lucide="info" class="w-5 h-5 text-emerald-400"></i>
+    <span id="toast-message" class="text-sm font-medium">Ação realizada com sucesso!</span>
+  </div>
+
+  <!-- MENU LATERAL (DESKTOP) -->
+  <aside class="hidden md:flex md:w-64 bg-slate-900 text-white flex-col justify-between shadow-xl z-20">
+    <div>
+      <div class="p-6 flex items-center gap-3 border-b border-slate-800">
+        <div class="bg-gradient-to-tr from-brand-600 to-emerald-500 p-2.5 rounded-xl shadow-lg">
+          <i data-lucide="store" class="w-6 h-6 text-white"></i>
+        </div>
+        <div>
+          <h1 class="font-bold text-lg leading-tight tracking-wide">ComércioPro</h1>
+          <p class="text-xs text-slate-400">Gestão & Presença Digital</p>
+        </div>
+      </div>
+
+      <nav class="p-4 space-y-1 text-sm font-medium">
+        <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 bg-brand-600 text-white shadow-sm">
+          <i data-lucide="layout-dashboard" class="w-5 h-5"></i> Dashboard
+        </button>
+        <button onclick="switchTab('precificacao')" id="nav-precificacao" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 text-slate-400 hover:bg-slate-800 hover:text-white">
+          <i data-lucide="calculator" class="w-5 h-5"></i> Preço Certo
+        </button>
+        <button onclick="switchTab('fiados')" id="nav-fiados" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 text-slate-400 hover:bg-slate-800 hover:text-white">
+          <i data-lucide="notebook-pen" class="w-5 h-5"></i> Caderneta de Fiados
+        </button>
+        <button onclick="switchTab('prolabore')" id="nav-prolabore" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 text-slate-400 hover:bg-slate-800 hover:text-white">
+          <i data-lucide="wallet" class="w-5 h-5"></i> Pró-labore (PJ/PF)
+        </button>
+        <button onclick="switchTab('vitrine')" id="nav-vitrine" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 text-slate-400 hover:bg-slate-800 hover:text-white">
+          <i data-lucide="shopping-bag" class="w-5 h-5"></i> Mini-Vitrine
+        </button>
+        <button onclick="switchTab('posts')" id="nav-posts" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 text-slate-400 hover:bg-slate-800 hover:text-white">
+          <i data-lucide="megaphone" class="w-5 h-5"></i> Gerador de Posts
+        </button>
+        <button onclick="switchTab('google')" id="nav-google" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 text-slate-400 hover:bg-slate-800 hover:text-white">
+          <i data-lucide="map-pin" class="w-5 h-5"></i> Google Meu Negócio
+        </button>
+      </nav>
+    </div>
+
+    <div class="p-4 border-t border-slate-800">
+      <div class="bg-slate-800/60 rounded-xl p-3 flex items-center gap-3">
+        <div class="w-9 h-9 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-sm">
+          MEI
+        </div>
+        <div>
+          <p class="text-xs font-semibold text-white">Meu Comércio</p>
+          <p class="text-[10px] text-slate-400">Modo Gratuito Ativo</p>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ÁREA PRINCIPAL -->
+  <div class="flex-1 flex flex-col h-full overflow-hidden">
+    
+    <!-- HEADER MOBILE COM MENU E NAVEGAÇÃO -->
+    <header class="bg-slate-900 text-white md:hidden border-b border-slate-800 sticky top-0 z-30">
+      <div class="flex items-center justify-between p-4">
+        <div class="flex items-center gap-3">
+          <div class="bg-gradient-to-tr from-brand-600 to-emerald-500 p-2 rounded-lg">
+            <i data-lucide="store" class="w-5 h-5 text-white"></i>
+          </div>
+          <span class="font-bold text-base">ComércioPro</span>
+        </div>
+        <button id="mobile-menu-toggle" onclick="toggleMobileMenu()" class="p-2 text-slate-400 hover:text-white">
+          <i data-lucide="menu" class="w-6 h-6"></i>
+        </button>
+      </div>
+
+      <!-- DROPDOWN MENU MOBILE -->
+      <div id="mobile-menu" class="hidden bg-slate-900 border-b border-slate-800 p-4 space-y-2">
+        <button onclick="switchTab('dashboard'); toggleMobileMenu()" class="w-full text-left px-4 py-2.5 rounded-lg text-slate-200 hover:bg-slate-800 flex items-center gap-3">
+          <i data-lucide="layout-dashboard" class="w-4 h-4 text-brand-500"></i> Dashboard
+        </button>
+        <button onclick="switchTab('precificacao'); toggleMobileMenu()" class="w-full text-left px-4 py-2.5 rounded-lg text-slate-200 hover:bg-slate-800 flex items-center gap-3">
+          <i data-lucide="calculator" class="w-4 h-4 text-brand-500"></i> Preço Certo
+        </button>
+        <button onclick="switchTab('fiados'); toggleMobileMenu()" class="w-full text-left px-4 py-2.5 rounded-lg text-slate-200 hover:bg-slate-800 flex items-center gap-3">
+          <i data-lucide="notebook-pen" class="w-4 h-4 text-brand-500"></i> Caderneta de Fiados
+        </button>
+        <button onclick="switchTab('prolabore'); toggleMobileMenu()" class="w-full text-left px-4 py-2.5 rounded-lg text-slate-200 hover:bg-slate-800 flex items-center gap-3">
+          <i data-lucide="wallet" class="w-4 h-4 text-brand-500"></i> Pró-labore (PJ/PF)
+        </button>
+        <button onclick="switchTab('vitrine'); toggleMobileMenu()" class="w-full text-left px-4 py-2.5 rounded-lg text-slate-200 hover:bg-slate-800 flex items-center gap-3">
+          <i data-lucide="shopping-bag" class="w-4 h-4 text-brand-500"></i> Mini-Vitrine
+        </button>
+        <button onclick="switchTab('posts'); toggleMobileMenu()" class="w-full text-left px-4 py-2.5 rounded-lg text-slate-200 hover:bg-slate-800 flex items-center gap-3">
+          <i data-lucide="megaphone" class="w-4 h-4 text-brand-500"></i> Gerador de Posts
+        </button>
+        <button onclick="switchTab('google'); toggleMobileMenu()" class="w-full text-left px-4 py-2.5 rounded-lg text-slate-200 hover:bg-slate-800 flex items-center gap-3">
+          <i data-lucide="map-pin" class="w-4 h-4 text-brand-500"></i> Google Meu Negócio
+        </button>
+      </div>
+    </header>
+
+    <!-- CONTEÚDO DAS ABAS (SCROLLÁVEL) -->
+    <main class="flex-1 overflow-y-auto custom-scrollbar p-4 md:p-8 bg-slate-50">
+
+      <!-- ================= 1. DASHBOARD ================= -->
+      <section id="tab-dashboard" class="tab-content space-y-6 max-w-7xl mx-auto">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <h2 class="text-2xl md:text-3xl font-bold text-slate-900 tracking-tight">Painel de Controle</h2>
+            <p class="text-slate-500 text-sm mt-1">Visão geral e ações rápidas para o seu dia a dia.</p>
+          </div>
+          <div class="inline-flex items-center gap-2 bg-emerald-50 text-emerald-700 px-3.5 py-1.5 rounded-full text-xs font-semibold border border-emerald-200 self-start">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Sistema Ativo e Pronto
+          </div>
+        </div>
+
+        <!-- CARDS DE METRICAS CHAVE -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex items-center justify-between">
+            <div>
+              <p class="text-xs font-medium text-slate-500">A Receber em Fiados</p>
+              <h3 id="dash-total-fiados" class="text-xl font-bold text-slate-900 mt-1">R$ 0,00</h3>
+              <p id="dash-count-fiados" class="text-[11px] text-slate-400 mt-0.5">0 contas cadastradas</p>
+            </div>
+            <div class="w-12 h-12 bg-amber-50 text-amber-600 rounded-xl flex items-center justify-center">
+              <i data-lucide="receipt text-amber-600" class="w-6 h-6"></i>
+            </div>
+          </div>
+
+          <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex items-center justify-between">
+            <div>
+              <p class="text-xs font-medium text-slate-500">Fiados Atrasados</p>
+              <h3 id="dash-atrasados-fiados" class="text-xl font-bold text-rose-600 mt-1">R$ 0,00</h3>
+              <p id="dash-count-atrasados" class="text-[11px] text-rose-500 mt-0.5">0 vencidos</p>
+            </div>
+            <div class="w-12 h-12 bg-rose-50 text-rose-600 rounded-xl flex items-center justify-center">
+              <i data-lucide="alert-circle" class="w-6 h-6"></i>
+            </div>
+          </div>
+
+          <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex items-center justify-between">
+            <div>
+              <p class="text-xs font-medium text-slate-500">Produtos Precificados</p>
+              <h3 id="dash-total-precificados" class="text-xl font-bold text-slate-900 mt-1">0</h3>
+              <p class="text-[11px] text-slate-400 mt-0.5">Calculados com segurança</p>
+            </div>
+            <div class="w-12 h-12 bg-brand-50 text-brand-600 rounded-xl flex items-center justify-center">
+              <i data-lucide="tags" class="w-6 h-6"></i>
+            </div>
+          </div>
+
+          <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex items-center justify-between">
+            <div>
+              <p class="text-xs font-medium text-slate-500">Produtos na Vitrine</p>
+              <h3 id="dash-total-vitrine" class="text-xl font-bold text-slate-900 mt-1">0</h3>
+              <p class="text-[11px] text-slate-400 mt-0.5">Prontos para compartilhar</p>
+            </div>
+            <div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center">
+              <i data-lucide="store" class="w-6 h-6"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- ACESSO RÁPIDO & DICA DO DIA -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div class="lg:col-span-2 bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm space-y-4">
+            <h3 class="font-bold text-slate-900 text-lg flex items-center gap-2">
+              <i data-lucide="zap" class="w-5 h-5 text-amber-500"></i> Ações Rápidas
+            </h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <button onclick="switchTab('precificacao')" class="p-4 rounded-xl border border-slate-200 hover:border-brand-500 hover:bg-brand-50/50 transition-all text-left flex items-start gap-3 group">
+                <div class="p-2.5 bg-brand-100 text-brand-700 rounded-lg group-hover:bg-brand-600 group-hover:text-white transition-colors">
+                  <i data-lucide="calculator" class="w-5 h-5"></i>
+                </div>
+                <div>
+                  <h4 class="font-semibold text-slate-800 text-sm">Calcular Preço Certo</h4>
+                  <p class="text-xs text-slate-500 mt-0.5">Evite prejuízos embutindo impostos e taxas corretamente.</p>
+                </div>
+              </button>
+
+              <button onclick="switchTab('fiados')" class="p-4 rounded-xl border border-slate-200 hover:border-emerald-500 hover:bg-emerald-50/50 transition-all text-left flex items-start gap-3 group">
+                <div class="p-2.5 bg-emerald-100 text-emerald-700 rounded-lg group-hover:bg-emerald-600 group-hover:text-white transition-colors">
+                  <i data-lucide="send" class="w-5 h-5"></i>
+                </div>
+                <div>
+                  <h4 class="font-semibold text-slate-800 text-sm">Cobrar Fiado por WhatsApp</h4>
+                  <p class="text-xs text-slate-500 mt-0.5">Envie lembretes educados e profissionais direto para o cliente.</p>
+                </div>
+              </button>
+
+              <button onclick="switchTab('vitrine')" class="p-4 rounded-xl border border-slate-200 hover:border-purple-500 hover:bg-purple-50/50 transition-all text-left flex items-start gap-3 group">
+                <div class="p-2.5 bg-purple-100 text-purple-700 rounded-lg group-hover:bg-purple-600 group-hover:text-white transition-colors">
+                  <i data-lucide="plus-circle" class="w-5 h-5"></i>
+                </div>
+                <div>
+                  <h4 class="font-semibold text-slate-800 text-sm">Adicionar à Vitrine</h4>
+                  <p class="text-xs text-slate-500 mt-0.5">Crie seu catálogo virtual simplificado em instantes.</p>
+                </div>
+              </button>
+
+              <button onclick="switchTab('posts')" class="p-4 rounded-xl border border-slate-200 hover:border-rose-500 hover:bg-rose-50/50 transition-all text-left flex items-start gap-3 group">
+                <div class="p-2.5 bg-rose-100 text-rose-700 rounded-lg group-hover:bg-rose-600 group-hover:text-white transition-colors">
+                  <i data-lucide="sparkles" class="w-5 h-5"></i>
+                </div>
+                <div>
+                  <h4 class="font-semibold text-slate-800 text-sm">Gerar Post para Instagram</h4>
+                  <p class="text-xs text-slate-500 mt-0.5">Crie legendas com hashtags prontas para atrair compradores.</p>
+                </div>
+              </button>
+            </div>
+          </div>
+
+          <!-- DICA DE GESTÃO -->
+          <div class="bg-gradient-to-br from-slate-900 to-slate-800 text-white p-6 rounded-2xl shadow-md flex flex-col justify-between">
+            <div class="space-y-3">
+              <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-semibold">
+                <i data-lucide="lightbulb" class="w-3.5 h-3.5"></i> Dica de Hoje
+              </div>
+              <h3 class="text-lg font-bold">Separou suas contas este mês?</h3>
+              <p class="text-xs text-slate-300 leading-relaxed">
+                Nunca pague o mercado da sua casa usando o dinheiro do caixa da loja. Defina um valor de **Pró-labore** fixo mensal e transfira para sua conta pessoal uma vez ao mês.
+              </p>
+            </div>
+            <button onclick="switchTab('prolabore')" class="mt-6 w-full py-2.5 bg-brand-600 hover:bg-brand-500 text-white font-medium text-xs rounded-xl transition-colors">
+              Simular Meu Pró-labore Sustentável
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= 2. CALCULADORA DE PREÇO CERTO ================= -->
+      <section id="tab-precificacao" class="tab-content hidden space-y-6 max-w-7xl mx-auto">
+        <div>
+          <h2 class="text-2xl md:text-3xl font-bold text-slate-900 tracking-tight">Calculadora de Preço Certo</h2>
+          <p class="text-slate-500 text-sm mt-1">Descubra exatamente quanto cobrar para não ter prejuízo com taxas invisíveis.</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <!-- FORMULÁRIO -->
+          <div class="lg:col-span-7 bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm space-y-4">
+            <h3 class="text-base font-bold text-slate-900 border-b border-slate-100 pb-3 flex items-center gap-2">
+              <i data-lucide="sliders" class="w-4 h-4 text-brand-600"></i> Dados do Produto
+            </h3>
+
+            <div class="space-y-4 text-sm">
+              <div>
+                <label class="block font-medium text-slate-700 mb-1">Nome do Produto (opcional)</label>
+                <input type="text" id="calc-nome" placeholder="Ex: Camiseta Algodão Premium" class="w-full px-3.5 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500 text-sm">
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label class="block font-medium text-slate-700 mb-1">Custo de Compra / Produção (R$)</label>
+                  <input type="number" step="0.01" id="calc-custo" placeholder="0.00" oninput="calcularPreco()" class="w-full px-3.5 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500 text-sm">
+                </div>
+                <div>
+                  <label class="block font-medium text-slate-700 mb-1">Custos Operacionais Embalagem (R$)</label>
+                  <input type="number" step="0.01" id="calc-operacional" value="2.00" oninput="calcularPreco()" class="w-full px-3.5 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500 text-sm">
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div>
+                  <label class="block font-medium text-slate-700 mb-1">Impostos (%) <span class="text-[10px] text-slate-400">MEI ~4% / Simples</span></label>
+                  <input type="number" step="0.1" id="calc-imposto" value="4.0" oninput="calcularPreco()" class="w-full px-3.5 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500 text-sm">
+                </div>
+                <div>
+                  <label class="block font-medium text-slate-700 mb-1">Taxa Cartão/Plataforma (%)</label>
+                  <input type="number" step="0.1" id="calc-taxa" value="4.99" oninput="calcularPreco()" class="w-full px-3.5 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500 text-sm">
+                </div>
+                <div>
+                  <label class="block font-medium text-slate-700 mb-1">Margem de Lucro Desejada (%)</label>
+                  <input type="number" step="1" id="calc-lucro" value="30" oninput="calcularPreco()" class="w-full px-3.5 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500 text-sm">
+                </div>
+              </div>
+            </div>
+
+            <div class="pt-3">
+              <button onclick="salvarProdutoPrecificado()" class="w-full py-2.5 bg-brand-600 hover:bg-brand-700 text-white font-medium text-sm rounded-xl transition-all shadow-sm flex items-center justify-center gap-2">
+                <i data-lucide="save" class="w-4 h-4"></i> Salvar Produto em Lista
+              </button>
+            </div>
+          </div>
+
+          <!-- RESULTADO CALCULADO -->
+          <div class="lg:col-span-5 space-y-4">
+            <div class="bg-slate-900 text-white p-6 rounded-2xl shadow-xl space-y-5">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-semibold uppercase tracking-wider text-slate-400">Preço de Venda Sugerido</span>
+                <span class="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-semibold">Lucro Real Garantido</span>
+              </div>
+
+              <div>
+                <h3 id="res-preco-venda" class="text-4xl font-extrabold tracking-tight text-white">R$ 0,00</h3>
+                <p id="res-lucro-real" class="text-sm text-emerald-400 font-medium mt-1">Lucro limpo: R$ 0,00 por unidade</p>
+              </div>
+
+              <div class="border-t border-slate-800 pt-4 space-y-2 text-xs">
+                <div class="flex justify-between text-slate-300">
+                  <span>Custo direto + Operacional:</span>
+                  <span id="res-det-custodireto">R$ 0,00</span>
+                </div>
+                <div class="flex justify-between text-slate-300">
+                  <span>Impostos recolhidos:</span>
+                  <span id="res-det-imposto">R$ 0,00</span>
+                </div>
+                <div class="flex justify-between text-slate-300">
+                  <span>Taxa de maquininha/plataforma:</span>
+                  <span id="res-det-taxas">R$ 0,00</span>
+                </div>
+                <div class="flex justify-between font-bold text-white pt-2 border-t border-slate-800 text-sm">
+                  <span>Ponto de Equilíbrio (Mínimo sem prejuízo):</span>
+                  <span id="res-ponto-equilibrio" class="text-amber-400">R$ 0,00</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- TABELA DE PRODUTOS SALVOS DA SESSÃO -->
+            <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm space-y-3">
+              <h4 class="font-bold text-slate-800 text-sm flex items-center justify-between">
+                <span>Produtos Precificados Salvos</span>
+                <span id="count-salvos" class="text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded-md">0</span>
+              </h4>
+              <div id="lista-precificados" class="space-y-2 max-h-48 overflow-y-auto custom-scrollbar text-xs">
+                <p class="text-slate-400 text-center py-4">Nenhum produto salvo ainda.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= 3. CADERNETA DE FIADOS ================= -->
+      <section id="tab-fiados" class="tab-content hidden space-y-6 max-w-7xl mx-auto">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <h2 class="text-2xl md:text-3xl font-bold text-slate-900 tracking-tight">Caderneta de Fiados</h2>
+            <p class="text-slate-500 text-sm mt-1">Registre cobranças e envie lembretes educados por WhatsApp com 1 clique.</p>
+          </div>
+          <button onclick="abrirModalFiado()" class="bg-brand-600 hover:bg-brand-700 text-white px-4 py-2.5 rounded-xl font-medium text-sm transition-all shadow-sm flex items-center gap-2 self-start">
+            <i data-lucide="plus" class="w-4 h-4"></i> Novo Fiado
+          </button>
+        </div>
+
+        <!-- RESUMO FIADOS -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div class="bg-white p-4 rounded-xl border border-slate-200/80 shadow-sm">
+            <p class="text-xs text-slate-500">Total Pendente</p>
+            <h3 id="fiado-total-pendente" class="text-lg font-bold text-slate-900 mt-0.5">R$ 0,00</h3>
+          </div>
+          <div class="bg-white p-4 rounded-xl border border-slate-200/80 shadow-sm">
+            <p class="text-xs text-slate-500">Fiados Atrasados</p>
+            <h3 id="fiado-total-atrasado" class="text-lg font-bold text-rose-600 mt-0.5">R$ 0,00</h3>
+          </div>
+          <div class="bg-white p-4 rounded-xl border border-slate-200/80 shadow-sm">
+            <p class="text-xs text-slate-500">Total Recebido</p>
+            <h3 id="fiado-total-pago" class="text-lg font-bold text-emerald-600 mt-0.5">R$ 0,00</h3>
+          </div>
+        </div>
+
+        <!-- LISTA DE COBRANÇAS -->
+        <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
+          <div class="p-4 border-b border-slate-100 font-bold text-slate-800 text-sm flex items-center justify-between">
+            <span>Registro de Clientes</span>
+            <span class="text-xs text-slate-400 font-normal">Clique no ícone do WhatsApp para gerar a mensagem</span>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse text-xs md:text-sm">
+              <thead>
+                <tr class="bg-slate-50 text-slate-500 font-semibold border-b border-slate-200/60">
+                  <th class="p-4">Cliente</th>
+                  <th class="p-4">Descrição/Item</th>
+                  <th class="p-4">Valor</th>
+                  <th class="p-4">Vencimento</th>
+                  <th class="p-4">Status</th>
+                  <th class="p-4 text-center">Ações</th>
+                </tr>
+              </thead>
+              <tbody id="tabela-fiados" class="divide-y divide-slate-100">
+                <!-- Linhas inseridas via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= 4. PRÓ-LABORE (PJ VS PF) ================= -->
+      <section id="tab-prolabore" class="tab-content hidden space-y-6 max-w-7xl mx-auto">
+        <div>
+          <h2 class="text-2xl md:text-3xl font-bold text-slate-900 tracking-tight">Simulador de Pró-labore (PJ vs PF)</h2>
+          <p class="text-slate-500 text-sm mt-1">Aprenda a separar a conta do seu comércio da conta da sua casa de forma sustentável.</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm space-y-4">
+            <h3 class="font-bold text-slate-900 text-base border-b border-slate-100 pb-3">Calculadora de Salário de Dono</h3>
+            
+            <div class="space-y-4 text-sm">
+              <div>
+                <label class="block font-medium text-slate-700 mb-1">Faturamento Médio Mensal (Vendas Totais em R$)</label>
+                <input type="number" id="pro-faturamento" placeholder="Ex: 15000" oninput="calcularProlabore()" class="w-full px-3.5 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500">
+              </div>
+
+              <div>
+                <label class="block font-medium text-slate-700 mb-1">Despesas Fixas da Loja (Aluguel, Luz, Fornecedores em R$)</label>
+                <input type="number" id="pro-despesas" placeholder="Ex: 9000" oninput="calcularProlabore()" class="w-full px-3.5 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500">
+              </div>
+
+              <div>
+                <label class="block font-medium text-slate-700 mb-1">% Reservada para Caixa do Negócio (Reinvestimento)</label>
+                <input type="number" id="pro-reserva-pct" value="20" oninput="calcularProlabore()" class="w-full px-3.5 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500">
+                <span class="text-[11px] text-slate-400">Recomendado de 15% a 30% para fundo de reserva.</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-slate-900 text-white p-6 rounded-2xl shadow-xl flex flex-col justify-between space-y-6">
+            <div>
+              <span class="text-xs font-semibold uppercase tracking-wider text-slate-400">Seu Pró-labore Recomendado</span>
+              <h3 id="res-pro-labore" class="text-4xl font-extrabold text-emerald-400 mt-2">R$ 0,00</h3>
+              <p class="text-xs text-slate-300 mt-1">Este é o valor máximo que você pode transferir para sua conta física sem sufocar o comércio.</p>
+            </div>
+
+            <div class="space-y-3 border-t border-slate-800 pt-4 text-xs">
+              <div class="flex justify-between">
+                <span class="text-slate-400">Sua Reserva de Emergência Comercial (Mês):</span>
+                <span id="res-pro-reserva" class="font-bold text-amber-400">R$ 0,00</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-slate-400">Lucro Líquido Restante na Empresa:</span>
+                <span id="res-pro-lucro" class="font-bold text-slate-200">R$ 0,00</span>
+              </div>
+            </div>
+
+            <div class="bg-slate-800/80 p-4 rounded-xl border border-slate-700 text-xs space-y-2">
+              <p class="font-semibold text-emerald-400 flex items-center gap-1.5">
+                <i data-lucide="check-circle-2" class="w-4 h-4"></i> Regra de Ouro da Gestão:
+              </p>
+              <p class="text-slate-300 leading-relaxed">
+                Transfira o seu Pró-labore em 2 datas fixas no mês (ex: dia 5 e dia 20). Nunca tire dinheiro aleatório do caixa no meio do dia para contas pessoais!
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= 5. MINI-VITRINE (CATÁLOGO) ================= -->
+      <section id="tab-vitrine" class="tab-content hidden space-y-6 max-w-7xl mx-auto">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <h2 class="text-2xl md:text-3xl font-bold text-slate-900 tracking-tight">Mini-Vitrine Digital</h2>
+            <p class="text-slate-500 text-sm mt-1">Crie cards de produtos e compartilhe seu catálogo rapidamente.</p>
+          </div>
+          <button onclick="abrirModalVitrine()" class="bg-brand-600 hover:bg-brand-700 text-white px-4 py-2.5 rounded-xl font-medium text-sm transition-all shadow-sm flex items-center gap-2 self-start">
+            <i data-lucide="plus-circle" class="w-4 h-4"></i> Cadastrar Produto
+          </button>
+        </div>
+
+        <div id="grid-vitrine" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <!-- Cards dinamicos inseridos via JS -->
+        </div>
+      </section>
+
+      <!-- ================= 6. GERADOR DE POSTS ================= -->
+      <section id="tab-posts" class="tab-content hidden space-y-6 max-w-7xl mx-auto">
+        <div>
+          <h2 class="text-2xl md:text-3xl font-bold text-slate-900 tracking-tight">Gerador de Posts e Legendas</h2>
+          <p class="text-slate-500 text-sm mt-1">Sem tempo para redes sociais? Gere legendas perfeitas para Instagram e WhatsApp com 1 clique.</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <div class="lg:col-span-5 bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm space-y-4">
+            <h3 class="font-bold text-slate-900 text-base border-b border-slate-100 pb-3">Configurar Mensagem</h3>
+            
+            <div class="space-y-4 text-sm">
+              <div>
+                <label class="block font-medium text-slate-700 mb-1">Qual é o objetivo do post?</label>
+                <select id="post-tipo" onchange="gerarLegenda()" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500 text-sm bg-white">
+                  <option value="promocao">🔥 Promoção / Oferta Relâmpago</option>
+                  <option value="novidade">✨ Chegada de Novidades / Estoque Renovado</option>
+                  <option value="bomdia">☀️ Bom Dia / Agradecimento a Clientes</option>
+                  <option value="aviso">📢 Aviso de Horário / Funcionamento</option>
+                </select>
+              </div>
+
+              <div>
+                <label class="block font-medium text-slate-700 mb-1">Nome do Produto ou Oferta</label>
+                <input type="text" id="post-produto" value="Kit Especial de Fim de Semana" oninput="gerarLegenda()" class="w-full px-3.5 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500">
+              </div>
+
+              <div>
+                <label class="block font-medium text-slate-700 mb-1">Preço ou Desconto (opcional)</label>
+                <input type="text" id="post-detalhe" value="Com 20% de desconto no Pix" oninput="gerarLegenda()" class="w-full px-3.5 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500">
+              </div>
+
+              <div>
+                <label class="block font-medium text-slate-700 mb-1">Nome da Sua Loja</label>
+                <input type="text" id="post-loja" value="Nossa Loja do Bairro" oninput="gerarLegenda()" class="w-full px-3.5 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500">
+              </div>
+            </div>
+          </div>
+
+          <div class="lg:col-span-7 bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col justify-between space-y-4">
+            <div>
+              <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                <h3 class="font-bold text-slate-900 text-base">Legenda Gerada</h3>
+                <span class="text-xs text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full font-semibold">Pronta para copiar</span>
+              </div>
+              <textarea id="post-resultado" rows="10" readonly class="w-full mt-4 p-4 rounded-xl bg-slate-50 border border-slate-200 text-slate-800 font-mono text-sm leading-relaxed focus:outline-none custom-scrollbar"></textarea>
+            </div>
+
+            <button onclick="copiarLegenda()" class="w-full py-3 bg-brand-600 hover:bg-brand-700 text-white font-medium text-sm rounded-xl transition-all shadow-sm flex items-center justify-center gap-2">
+              <i data-lucide="copy" class="w-4 h-4"></i> Copiar Legenda para a Área de Transferência
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= 7. GOOGLE MEU NEGÓCIO ================= -->
+      <section id="tab-google" class="tab-content hidden space-y-6 max-w-7xl mx-auto">
+        <div>
+          <h2 class="text-2xl md:text-3xl font-bold text-slate-900 tracking-tight">Checklist Google Meu Negócio</h2>
+          <p class="text-slate-500 text-sm mt-1">Coloque sua loja no mapa do Google e seja encontrado por clientes locais de graça.</p>
+        </div>
+
+        <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm space-y-6">
+          <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+            <div>
+              <h3 class="font-bold text-slate-900 text-lg">Seu Progresso de Visibilidade</h3>
+              <p class="text-xs text-slate-500">Complete as 5 etapas essenciais para dominar a busca local.</p>
+            </div>
+            <div class="text-right">
+              <span id="google-progress-pct" class="text-2xl font-black text-brand-600">0%</span>
+            </div>
+          </div>
+
+          <!-- LISTA DE PASSO A PASSO -->
+          <div class="space-y-4">
+            <label class="flex items-start gap-4 p-4 rounded-xl border border-slate-200 hover:bg-slate-50 transition-colors cursor-pointer group">
+              <input type="checkbox" onchange="atualizarProgressoGoogle()" class="g-check mt-1 w-5 h-5 rounded text-brand-600 focus:ring-brand-500 border-slate-300">
+              <div>
+                <h4 class="font-semibold text-slate-900 text-sm group-hover:text-brand-600">1. Criar perfil gratuito no Google Business Profile</h4>
+                <p class="text-xs text-slate-500 mt-0.5">Acesse google.com/business com seu e-mail e cadastre o nome exato da sua loja física ou atendimento local.</p>
+              </div>
+            </label>
+
+            <label class="flex items-start gap-4 p-4 rounded-xl border border-slate-200 hover:bg-slate-50 transition-colors cursor-pointer group">
+              <input type="checkbox" onchange="atualizarProgressoGoogle()" class="g-check mt-1 w-5 h-5 rounded text-brand-600 focus:ring-brand-500 border-slate-300">
+              <div>
+                <h4 class="font-semibold text-slate-900 text-sm group-hover:text-brand-600">2. Adicionar Endereço e Horário de Funcionamento Atualizado</h4>
+                <p class="text-xs text-slate-500 mt-0.5">Garanta que o cliente saiba exatamente se a loja está aberta antes de ir até você. Inclua seu WhatsApp corporativo.</p>
+              </div>
+            </label>
+
+            <label class="flex items-start gap-4 p-4 rounded-xl border border-slate-200 hover:bg-slate-50 transition-colors cursor-pointer group">
+              <input type="checkbox" onchange="atualizarProgressoGoogle()" class="g-check mt-1 w-5 h-5 rounded text-brand-600 focus:ring-brand-500 border-slate-300">
+              <div>
+                <h4 class="font-semibold text-slate-900 text-sm group-hover:text-brand-600">3. Postar 5 Fotos de Alta Qualidade da Fachada e Produtos</h4>
+                <p class="text-xs text-slate-500 mt-0.5">Perfis com fotos reais recebem até 42% mais solicitações de rotas no Google Maps.</p>
+              </div>
+            </label>
+
+            <label class="flex items-start gap-4 p-4 rounded-xl border border-slate-200 hover:bg-slate-50 transition-colors cursor-pointer group">
+              <input type="checkbox" onchange="atualizarProgressoGoogle()" class="g-check mt-1 w-5 h-5 rounded text-brand-600 focus:ring-brand-500 border-slate-300">
+              <div>
+                <h4 class="font-semibold text-slate-900 text-sm group-hover:text-brand-600">4. Pedir Avaliações (Estrelinhas) para 10 Clientes Fiéis</h4>
+                <p class="text-xs text-slate-500 mt-0.5">Envie o link de avaliação direta pelo WhatsApp para seus clientes satisfeitos. Mais estrelas = topo das buscas.</p>
+              </div>
+            </label>
+
+            <label class="flex items-start gap-4 p-4 rounded-xl border border-slate-200 hover:bg-slate-50 transition-colors cursor-pointer group">
+              <input type="checkbox" onchange="atualizarProgressoGoogle()" class="g-check mt-1 w-5 h-5 rounded text-brand-600 focus:ring-brand-500 border-slate-300">
+              <div>
+                <h4 class="font-semibold text-slate-900 text-sm group-hover:text-brand-600">5. Responder a Todas as Dúvidas e Avaliações Recebidas</h4>
+                <p class="text-xs text-slate-500 mt-0.5">Responda agradecendo cada elogio. Isso demonstra profissionalismo para novos compradores da região.</p>
+              </div>
+            </label>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- MODAL DE ADICIONAR FIADO -->
+  <div id="modal-fiado" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+        <h3 class="font-bold text-slate-900 text-base">Novo Registro de Fiado</h3>
+        <button onclick="fecharModalFiado()" class="text-slate-400 hover:text-slate-600"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+
+      <div class="space-y-3 text-sm">
+        <div>
+          <label class="block font-medium text-slate-700 mb-1">Nome do Cliente</label>
+          <input type="text" id="fiado-nome" placeholder="Ex: Maria Silva" class="w-full px-3.5 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500">
+        </div>
+        <div>
+          <label class="block font-medium text-slate-700 mb-1">WhatsApp (com DDD)</label>
+          <input type="tel" id="fiado-whats" placeholder="Ex: 11999998888" class="w-full px-3.5 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500">
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-medium text-slate-700 mb-1">Valor (R$)</label>
+            <input type="number" step="0.01" id="fiado-valor" placeholder="0.00" class="w-full px-3.5 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500">
+          </div>
+          <div>
+            <label class="block font-medium text-slate-700 mb-1">Vencimento</label>
+            <input type="date" id="fiado-data" class="w-full px-3.5 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500">
+          </div>
+        </div>
+        <div>
+          <label class="block font-medium text-slate-700 mb-1">Descrição dos Produtos</label>
+          <input type="text" id="fiado-desc" placeholder="Ex: 2 Camisetas e 1 Calça" class="w-full px-3.5 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500">
+        </div>
+      </div>
+
+      <div class="pt-2 flex gap-2">
+        <button onclick="fecharModalFiado()" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium text-sm rounded-xl">Cancelar</button>
+        <button onclick="salvarFiado()" class="flex-1 py-2.5 bg-brand-600 hover:bg-brand-700 text-white font-medium text-sm rounded-xl">Salvar Cobrança</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL DE ADICIONAR ITEM NA VITRINE -->
+  <div id="modal-vitrine" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+        <h3 class="font-bold text-slate-900 text-base">Adicionar Produto à Vitrine</h3>
+        <button onclick="fecharModalVitrine()" class="text-slate-400 hover:text-slate-600"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+
+      <div class="space-y-3 text-sm">
+        <div>
+          <label class="block font-medium text-slate-700 mb-1">Nome do Produto</label>
+          <input type="text" id="vit-nome" placeholder="Ex: Tênis Esportivo Casual" class="w-full px-3.5 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500">
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-medium text-slate-700 mb-1">Preço de Venda (R$)</label>
+            <input type="number" step="0.01" id="vit-preco" placeholder="0.00" class="w-full px-3.5 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500">
+          </div>
+          <div>
+            <label class="block font-medium text-slate-700 mb-1">Categoria</label>
+            <input type="text" id="vit-cat" placeholder="Ex: Calçados" class="w-full px-3.5 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500">
+          </div>
+        </div>
+        <div>
+          <label class="block font-medium text-slate-700 mb-1">URL da Imagem (ou deixe em branco para padrão)</label>
+          <input type="text" id="vit-img" placeholder="https://..." class="w-full px-3.5 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500">
+        </div>
+      </div>
+
+      <div class="pt-2 flex gap-2">
+        <button onclick="fecharModalVitrine()" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium text-sm rounded-xl">Cancelar</button>
+        <button onclick="salvarVitrine()" class="flex-1 py-2.5 bg-brand-600 hover:bg-brand-700 text-white font-medium text-sm rounded-xl">Salvar Produto</button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- LÓGICA JAVASCRIPT PRINCIPAL -->
+  <script>
+    // ESTADO DA APLICAÇÃO (LOCALSTORAGE)
+    let fiados = JSON.parse(localStorage.getItem('cp_fiados')) || [
+      { id: 1, nome: 'Carlos Eduardo', whats: '5511999998888', valor: 145.50, data: '2026-11-01', desc: 'Calça Jeans + Cinto', pago: false },
+      { id: 2, nome: 'Ana Paula', whats: '5511988887777', valor: 60.00, data: '2026-11-15', desc: 'Blusa Regata', pago: true }
+    ];
+
+    let precificados = JSON.parse(localStorage.getItem('cp_precificados')) || [];
+    let vitrine = JSON.parse(localStorage.getItem('cp_vitrine')) || [
+      { id: 1, nome: 'Camiseta Algodão Premium', preco: 79.90, cat: 'Roupas', img: 'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=500&auto=format&fit=crop&q=60' },
+      { id: 2, nome: 'Caneca Cerâmica Artesanal', preco: 35.00, cat: 'Acessórios', img: 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=500&auto=format&fit=crop&q=60' }
+    ];
+
+    // INICIALIZAÇÃO
+    window.onload = function() {
+      lucide.createIcons();
+      calcularPreco();
+      renderizarFiados();
+      renderizarPrecificados();
+      renderizarVitrine();
+      atualizarDashboard();
+      gerarLegenda();
+    };
+
+    // TROCA DE ABAS
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+      document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+
+      document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.classList.remove('bg-brand-600', 'text-white', 'shadow-sm');
+        btn.classList.add('text-slate-400', 'hover:bg-slate-800', 'hover:text-white');
+      });
+
+      const activeNav = document.getElementById(`nav-${tabId}`);
+      if(activeNav) {
+        activeNav.classList.remove('text-slate-400', 'hover:bg-slate-800');
+        activeNav.classList.add('bg-brand-600', 'text-white', 'shadow-sm');
+      }
+    }
+
+    function toggleMobileMenu() {
+      const menu = document.getElementById('mobile-menu');
+      menu.classList.toggle('hidden');
+    }
+
+    // TOAST DE NOTIFICAÇÃO
+    function showToast(mensagem, icone = 'check-circle-2') {
+      const toast = document.getElementById('toast');
+      const msgEl = document.getElementById('toast-message');
+      const iconEl = document.getElementById('toast-icon');
+
+      msgEl.innerText = mensagem;
+      iconEl.setAttribute('data-lucide', icone);
+      lucide.createIcons();
+
+      toast.classList.remove('translate-x-full');
+      setTimeout(() => {
+        toast.classList.add('translate-x-full');
+      }, 3500);
+    }
+
+    // ================= 1. CALCULADORA DE PREÇO =================
+    function calcularPreco() {
+      const custo = parseFloat(document.getElementById('calc-custo').value) || 0;
+      const operacional = parseFloat(document.getElementById('calc-operacional').value) || 0;
+      const impostoPct = parseFloat(document.getElementById('calc-imposto').value) || 0;
+      const taxaPct = parseFloat(document.getElementById('calc-taxa').value) || 0;
+      const lucroPct = parseFloat(document.getElementById('calc-lucro').value) || 0;
+
+      const custoTotal = custo + operacional;
+      const somaPorcentagens = (impostoPct + taxaPct + lucroPct) / 100;
+
+      let precoVenda = 0;
+      if (somaPorcentagens < 1) {
+        precoVenda = custoTotal / (1 - somaPorcentagens);
+      } else {
+        precoVenda = custoTotal * 2; // Fallback de proteção
+      }
+
+      const valorImposto = precoVenda * (impostoPct / 100);
+      const valorTaxa = precoVenda * (taxaPct / 100);
+      const lucroReal = precoVenda * (lucroPct / 100);
+      const pontoEquilibrio = custoTotal + valorImposto + valorTaxa;
+
+      document.getElementById('res-preco-venda').innerText = formatarMoeda(precoVenda);
+      document.getElementById('res-lucro-real').innerText = `Lucro limpo: ${formatarMoeda(lucroReal)} por unidade`;
+      document.getElementById('res-det-custodireto').innerText = formatarMoeda(custoTotal);
+      document.getElementById('res-det-imposto').innerText = formatarMoeda(valorImposto);
+      document.getElementById('res-det-taxas').innerText = formatarMoeda(valorTaxa);
+      document.getElementById('res-ponto-equilibrio').innerText = formatarMoeda(pontoEquilibrio);
+    }
+
+    function salvarProdutoPrecificado() {
+      const nome = document.getElementById('calc-nome').value || 'Produto Sem Nome';
+      const preco = document.getElementById('res-preco-venda').innerText;
+
+      precificados.push({ nome, preco, data: new Date().toLocaleDateString() });
+      localStorage.setItem('cp_precificados', JSON.stringify(precificados));
+
+      document.getElementById('calc-nome').value = '';
+      renderizarPrecificados();
+      atualizarDashboard();
+      showToast('Produto precificado salvo!');
+    }
+
+    function renderizarPrecificados() {
+      const lista = document.getElementById('lista-precificados');
+      document.getElementById('count-salvos').innerText = precificados.length;
+
+      if (precificados.length === 0) {
+        lista.innerHTML = '<p class="text-slate-400 text-center py-4">Nenhum produto salvo ainda.</p>';
+        return;
+      }
+
+      lista.innerHTML = precificados.slice().reverse().map(p => `
+        <div class="flex items-center justify-between p-2.5 bg-slate-50 rounded-lg border border-slate-100">
+          <span class="font-medium text-slate-700">${p.nome}</span>
+          <span class="font-bold text-brand-600">${p.preco}</span>
+        </div>
+      `).join('');
+    }
+
+    // ================= 2. CADERNETA DE FIADOS =================
+    function abrirModalFiado() { document.getElementById('modal-fiado').classList.remove('hidden'); }
+    function fecharModalFiado() { document.getElementById('modal-fiado').classList.add('hidden'); }
+
+    function salvarFiado() {
+      const nome = document.getElementById('fiado-nome').value;
+      const whats = document.getElementById('fiado-whats').value.replace(/\D/g, '');
+      const valor = parseFloat(document.getElementById('fiado-valor').value) || 0;
+      const data = document.getElementById('fiado-data').value;
+      const desc = document.getElementById('fiado-desc').value;
+
+      if (!nome || !valor) {
+        showToast('Preencha pelo menos Nome e Valor!', 'alert-triangle');
+        return;
+      }
+
+      fiados.push({ id: Date.now(), nome, whats, valor, data, desc, pago: false });
+      localStorage.setItem('cp_fiados', JSON.stringify(fiados));
+
+      fecharModalFiado();
+      renderizarFiados();
+      atualizarDashboard();
+      showToast('Registro de fiado adicionado!');
+    }
+
+    function alternarStatusFiado(id) {
+      fiados = fiados.map(f => f.id === id ? { ...f, pago: !f.pago } : f);
+      localStorage.setItem('cp_fiados', JSON.stringify(fiados));
+      renderizarFiados();
+      atualizarDashboard();
+      showToast('Status da cobrança atualizado!');
+    }
+
+    function deletarFiado(id) {
+      fiados = fiados.filter(f => f.id !== id);
+      localStorage.setItem('cp_fiados', JSON.stringify(fiados));
+      renderizarFiados();
+      atualizarDashboard();
+      showToast('Cobrança removida.');
+    }
+
+    function enviarWhatsApp(id) {
+      const item = fiados.find(f => f.id === id);
+      if (!item || !item.whats) {
+        showToast('Número de WhatsApp inválido ou não informado!', 'alert-circle');
+        return;
+      }
+
+      const mensagem = `Olá, ${item.nome}! Tudo bem? passando aqui da loja apenas para lembrar da sua conta referente a (${item.desc}) no valor de ${formatarMoeda(item.valor)}, com vencimento em ${item.data ? new Date(item.data).toLocaleDateString('pt-BR') : 'breve'}. Caso precise da chave Pix para pagamento, me avise! Muito obrigado pela preferência! 😊`;
+      const telefone = item.whats.startsWith('55') ? item.whats : `55${item.whats}`;
+      const url = `https://api.whatsapp.com/send?phone=${telefone}&text=${encodeURIComponent(mensagem)}`;
+      window.open(url, '_blank');
+    }
+
+    function renderizarFiados() {
+      const tabela = document.getElementById('tabela-fiados');
+      const hoje = new Date().toISOString().split('T')[0];
+
+      let totalPendente = 0;
+      let totalAtrasado = 0;
+      let totalPago = 0;
+
+      if (fiados.length === 0) {
+        tabela.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-slate-400">Nenhuma cobrança registrada.</td></tr>`;
+      } else {
+        tabela.innerHTML = fiados.map(f => {
+          const isAtrasado = !f.pago && f.data && f.data < hoje;
+          
+          if (f.pago) totalPago += f.valor;
+          else {
+            totalPendente += f.valor;
+            if (isAtrasado) totalAtrasado += f.valor;
+          }
+
+          return `
+            <tr class="hover:bg-slate-50/80 transition-colors">
+              <td class="p-4 font-semibold text-slate-800">${f.nome}</td>
+              <td class="p-4 text-slate-600">${f.desc || '-'}</td>
+              <td class="p-4 font-bold text-slate-900">${formatarMoeda(f.valor)}</td>
+              <td class="p-4 text-slate-500">${f.data ? new Date(f.data).toLocaleDateString('pt-BR') : '-'}</td>
+              <td class="p-4">
+                ${f.pago ? 
+                  '<span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700">Pago</span>' : 
+                  (isAtrasado ? 
+                    '<span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-rose-100 text-rose-700 animate-pulse">Atrasado</span>' : 
+                    '<span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-100 text-amber-700">Pendente</span>'
+                  )
+                }
+              </td>
+              <td class="p-4 text-center space-x-2">
+                <button onclick="enviarWhatsApp(${f.id})" title="Enviar WhatsApp" class="p-1.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg transition-colors">
+                  <i data-lucide="send" class="w-4 h-4"></i>
+                </button>
+                <button onclick="alternarStatusFiado(${f.id})" title="Alternar Pago/Pendente" class="p-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg transition-colors">
+                  <i data-lucide="check" class="w-4 h-4"></i>
+                </button>
+                <button onclick="deletarFiado(${f.id})" title="Excluir" class="p-1.5 bg-slate-100 hover:bg-rose-100 text-rose-600 rounded-lg transition-colors">
+                  <i data-lucide="trash-2" class="w-4 h-4"></i>
+                </button>
+              </td>
+            </tr>
+          `;
+        }).join('');
+      }
+
+      document.getElementById('fiado-total-pendente').innerText = formatarMoeda(totalPendente);
+      document.getElementById('fiado-total-atrasado').innerText = formatarMoeda(totalAtrasado);
+      document.getElementById('fiado-total-pago').innerText = formatarMoeda(totalPago);
+      lucide.createIcons();
+    }
+
+    // ================= 3. PRÓ-LABORE =================
+    function calcularProlabore() {
+      const fat = parseFloat(document.getElementById('pro-faturamento').value) || 0;
+      const desp = parseFloat(document.getElementById('pro-despesas').value) || 0;
+      const resPct = parseFloat(document.getElementById('pro-reserva-pct').value) || 0;
+
+      const sobrouBruto = fat - desp;
+      const reserva = fat * (resPct / 100);
+      const prolabore = Math.max(0, sobrouBruto - reserva);
+
+      document.getElementById('res-pro-labore').innerText = formatarMoeda(prolabore);
+      document.getElementById('res-pro-reserva').innerText = formatarMoeda(reserva);
+      document.getElementById('res-pro-lucro').innerText = formatarMoeda(sobrouBruto);
+    }
+
+    // ================= 4. MINI-VITRINE =================
+    function abrirModalVitrine() { document.getElementById('modal-vitrine').classList.remove('hidden'); }
+    function fecharModalVitrine() { document.getElementById('modal-vitrine').classList.add('hidden'); }
+
+    function salvarVitrine() {
+      const nome = document.getElementById('vit-nome').value;
+      const preco = parseFloat(document.getElementById('vit-preco').value) || 0;
+      const cat = document.getElementById('vit-cat').value || 'Geral';
+      const img = document.getElementById('vit-img').value || 'https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=500&auto=format&fit=crop&q=60';
+
+      if(!nome || !preco) {
+        showToast('Preencha o Nome e o Preço do Produto!', 'alert-circle');
+        return;
+      }
+
+      vitrine.push({ id: Date.now(), nome, preco, cat, img });
+      localStorage.setItem('cp_vitrine', JSON.stringify(vitrine));
+
+      fecharModalVitrine();
+      renderizarVitrine();
+      atualizarDashboard();
+      showToast('Produto publicado na sua vitrine!');
+    }
+
+    function deletarVitrine(id) {
+      vitrine = vitrine.filter(v => v.id !== id);
+      localStorage.setItem('cp_vitrine', JSON.stringify(vitrine));
+      renderizarVitrine();
+      atualizarDashboard();
+      showToast('Produto removido da vitrine.');
+    }
+
+    function renderizarVitrine() {
+      const grid = document.getElementById('grid-vitrine');
+
+      if (vitrine.length === 0) {
+        grid.innerHTML = '<p class="col-span-full text-center text-slate-400 py-8">Sua vitrine está vazia. Adicione produtos para começar!</p>';
+        return;
+      }
+
+      grid.innerHTML = vitrine.map(item => `
+        <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden flex flex-col justify-between group">
+          <div class="relative h-44 bg-slate-100 overflow-hidden">
+            <img src="${item.img}" alt="${item.nome}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" onerror="this.src='https://placehold.co/400x300/e2e8f0/64748b?text=Produto'">
+            <span class="absolute top-3 left-3 bg-slate-900/80 backdrop-blur-md text-white text-[10px] font-semibold px-2.5 py-1 rounded-full">${item.cat}</span>
+            <button onclick="deletarVitrine(${item.id})" class="absolute top-3 right-3 p-1.5 bg-white/80 hover:bg-rose-600 hover:text-white text-slate-600 rounded-full transition-colors">
+              <i data-lucide="trash-2" class="w-4 h-4"></i>
+            </button>
+          </div>
+          <div class="p-4 space-y-2">
+            <h4 class="font-bold text-slate-900 text-sm line-clamp-1">${item.nome}</h4>
+            <div class="flex items-center justify-between pt-1">
+              <span class="text-lg font-extrabold text-brand-600">${formatarMoeda(item.preco)}</span>
+              <a href="https://api.whatsapp.com/send?text=${encodeURIComponent('Olá! Tenho interesse no produto ' + item.nome + ' no valor de ' + formatarMoeda(item.preco))}" target="_blank" class="p-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl text-xs font-semibold flex items-center gap-1 transition-colors">
+                <i data-lucide="shopping-cart" class="w-3.5 h-3.5"></i> Pedir
+              </a>
+            </div>
+          </div>
+        </div>
+      `).join('');
+
+      lucide.createIcons();
+    }
+
+    // ================= 5. GERADOR DE POSTS =================
+    function gerarLegenda() {
+      const tipo = document.getElementById('post-tipo').value;
+      const produto = document.getElementById('post-produto').value || 'nossas ofertas';
+      const detalhe = document.getElementById('post-detalhe').value || 'condições imperdíveis';
+      const loja = document.getElementById('post-loja').value || 'Nossa Loja';
+
+      let texto = '';
+
+      if (tipo === 'promocao') {
+        texto = `🔥 OFERTA IMPERDÍVEL NA ${loja.toUpperCase()}! 🔥\n\nQuer garantir ${produto} com preço especial?\n👉 ${detalhe}!\n\nCorra porque o estoque é limitado! Vem conferir de perto ou faça seu pedido direto pelo nosso WhatsApp na bio! 📲\n\n#promocao #${loja.replace(/\s+/g, '')} #comerciolocal #oferta #bairro`;
+      } else if (tipo === 'novidade') {
+        texto = `✨ NOVIDADE ACABOU DE CHEGAR! ✨\n\nChegou reposição de ${produto} na ${loja}! 😍\n\nGaranta o seu com: ${detalhe}.\n\nVenha tomar um café com a gente e conferir todas as novidades em primeira mão! 🛍️\n\n#novidade #tendencia #${loja.replace(/\s+/g, '')} #compras #lojalocal`;
+      } else if (tipo === 'bomdia') {
+        texto = `☀️ BOM DIA, CLIENTES E AMIGOS!\n\nMais um dia abençoado de portas abertas na ${loja}! 🙏\n\nJá preparou a sua lista da semana? Venha conferir ${produto} com ${detalhe}.\n\nAguardamos sua visita! ❤️\n\n#bomdia #atendimento #qualidade #${loja.replace(/\s+/g, '')} #bairro`;
+      } else if (tipo === 'aviso') {
+        texto = `📢 COMUNICADO IMPORTANTE - ${loja.toUpperCase()}\n\nPassando para avisar nossos clientes sobre ${produto}.\n\n📌 Detalhes: ${detalhe}.\n\nQualquer dúvida, estamos à disposição no WhatsApp! Obrigado pela preferência! 🙌\n\n#aviso #comunicado #${loja.replace(/\s+/g, '')}`;
+      }
+
+      document.getElementById('post-resultado').value = texto;
+    }
+
+    function copiarLegenda() {
+      const copyText = document.getElementById('post-resultado');
+      copyText.select();
+      document.execCommand('copy');
+      showToast('Legenda copiada com sucesso!');
+    }
+
+    // ================= 6. GOOGLE MEU NEGÓCIO =================
+    function atualizarProgressoGoogle() {
+      const checkboxes = document.querySelectorAll('.g-check');
+      const marcados = Array.from(checkboxes).filter(cb => cb.checked).length;
+      const pct = Math.round((marcados / checkboxes.length) * 100);
+
+      document.getElementById('google-progress-pct').innerText = `${pct}%`;
+      if(pct === 100) {
+        showToast('Parabéns! Sua loja está pronta para se destacar no Google Maps!', 'sparkles');
+      }
+    }
+
+    // ================= UTILS & DASHBOARD UPDATE =================
+    function formatarMoeda(valor) {
+      return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    }
+
+    function atualizarDashboard() {
+      const hoje = new Date().toISOString().split('T')[0];
+      
+      let pendente = 0;
+      let atrasado = 0;
+      let countAtrasado = 0;
+
+      fiados.forEach(f => {
+        if(!f.pago) {
+          pendente += f.valor;
+          if(f.data && f.data < hoje) {
+            atrasado += f.valor;
+            countAtrasado++;
+          }
+        }
+      });
+
+      document.getElementById('dash-total-fiados').innerText = formatarMoeda(pendente);
+      document.getElementById('dash-count-fiados').innerText = `${fiados.filter(f=>!f.pago).length} contas pendentes`;
+      document.getElementById('dash-atrasados-fiados').innerText = formatarMoeda(atrasado);
+      document.getElementById('dash-count-atrasados').innerText = `${countAtrasado} vencidos`;
+
+      document.getElementById('dash-total-precificados').innerText = precificados.length;
+      document.getElementById('dash-total-vitrine').innerText = vitrine.length;
+    }
+  </script>
+</body>
+</html>
